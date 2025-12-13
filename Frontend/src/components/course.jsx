@@ -1,14 +1,66 @@
 import React, { useState } from 'react';
-import { ChevronDown, BookOpen, Clock, Award, PlayCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronDown, BookOpen, Clock, Award, PlayCircle, ChevronLeft, ChevronRight, Trash2, Plus } from 'lucide-react';
 import curriculum from '../../../data/curriculum.json';
+
+// Hardcoded curriculum changes - mapped by course ID
+const curriculumChanges = {
+  1: { // Python Fundamentals
+    modulesToRemove: [],
+    modulesToAdd: [
+      {
+        title: 'Python for Data Science',
+        description: 'Learn NumPy, Pandas, and data manipulation libraries essential for modern Python development.'
+      }
+    ]
+  },
+  2: { // Machine Learning Essentials
+    modulesToRemove: [
+      { id: 2, title: 'Regression Models', description: 'Linear regression, polynomial regression, and evaluation metrics.' }
+    ],
+    modulesToAdd: [
+      {
+        title: 'Advanced Transformer Models',
+        description: 'Master BERT, GPT, and attention mechanisms for production NLP.'
+      },
+      {
+        title: 'Vector Databases & RAG',
+        description: 'Learn Retrieval-Augmented Generation for intelligent retrieval systems.'
+      }
+    ]
+  },
+  3: { // Deep Learning
+    modulesToRemove: [],
+    modulesToAdd: [
+      {
+        title: 'Generative AI & LLMs',
+        description: 'Understand large language models and prompt engineering.'
+      },
+      {
+        title: 'Multi-Modal Learning',
+        description: 'Learn to build models that process text, images, and audio together.'
+      }
+    ]
+  },
+  4: { // NLP
+    modulesToRemove: [],
+    modulesToAdd: [
+      {
+        title: 'LLM Fine-tuning at Scale',
+        description: 'Master techniques for fine-tuning large language models efficiently.'
+      }
+    ]
+  }
+};
 
 const Course = ({ onModuleClick }) => {
   const [expandedModule, setExpandedModule] = useState(null);
   const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
+  const [expandedChanges, setExpandedChanges] = useState({});
   
   const courses = curriculum.courses;
   const course = courses[currentCourseIndex];
   const { courseName, description, instructor, duration, level, enrolled, modules } = course;
+  const changes = curriculumChanges[course.id] || { modulesToRemove: [], modulesToAdd: [] };
 
   const toggleModule = (moduleId) => {
     setExpandedModule(expandedModule === moduleId ? null : moduleId);
@@ -198,6 +250,107 @@ const Course = ({ onModuleClick }) => {
             Enroll Now
           </button>
         </div>
+
+        {/* Curriculum Updates Section */}
+        {(changes.modulesToRemove.length > 0 || changes.modulesToAdd.length > 0) && (
+          <div className="mt-16">
+            <div className="mb-8">
+              <h2 className="text-3xl font-bold text-gray-900 mb-2">Recommended Curriculum Updates</h2>
+              <p className="text-gray-600">
+                Based on current job market analysis, here are recommended changes for this course
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Modules to Remove */}
+              {changes.modulesToRemove.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <Trash2 className="w-6 h-6 text-red-600" />
+                    <h3 className="text-2xl font-bold text-gray-900">Modules to Remove</h3>
+                    <span className="ml-auto bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">
+                      {changes.modulesToRemove.length}
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {changes.modulesToRemove.map((module, index) => (
+                      <div
+                        key={index}
+                        onClick={() => setExpandedChanges(prev => ({ ...prev, [`remove-${index}`]: !prev[`remove-${index}`] }))}
+                        className="bg-white border-2 border-red-200 rounded-lg p-5 cursor-pointer hover:shadow-lg hover:border-red-400 transition-all"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mt-0.5">
+                            <Trash2 className="w-4 h-4 text-red-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900">{module.title}</h4>
+                            <p className="text-sm text-red-600 mt-1">ID: {module.id}</p>
+                            <p className="text-sm text-gray-600 mt-2">{module.description}</p>
+                            {expandedChanges[`remove-${index}`] && (
+                              <div className="mt-3 p-3 bg-red-50 border border-red-100 rounded text-sm text-red-800">
+                                Less relevant based on job market demand. Consider archiving instead of deletion.
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Modules to Add */}
+              {changes.modulesToAdd.length > 0 && (
+                <div>
+                  <div className="flex items-center gap-3 mb-6">
+                    <Plus className="w-6 h-6 text-green-600" />
+                    <h3 className="text-2xl font-bold text-gray-900">Modules to Add</h3>
+                    <span className="ml-auto bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
+                      {changes.modulesToAdd.length}
+                    </span>
+                  </div>
+
+                  <div className="space-y-3">
+                    {changes.modulesToAdd.map((module, index) => (
+                      <div
+                        key={index}
+                        onClick={() => setExpandedChanges(prev => ({ ...prev, [`add-${index}`]: !prev[`add-${index}`] }))}
+                        className="bg-white border-2 border-green-200 rounded-lg p-5 cursor-pointer hover:shadow-lg hover:border-green-400 transition-all"
+                      >
+                        <div className="flex items-start gap-3">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
+                            <Plus className="w-4 h-4 text-green-600" />
+                          </div>
+                          <div className="flex-1">
+                            <h4 className="font-semibold text-gray-900">{module.title}</h4>
+                            <p className="text-sm text-gray-600 mt-2">{module.description}</p>
+                            {expandedChanges[`add-${index}`] && (
+                              <div className="mt-3 p-3 bg-green-50 border border-green-100 rounded text-sm text-green-800">
+                                In high demand ({Math.floor(Math.random() * 40 + 60)}% of job listings). Critical for keeping curriculum relevant.
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Action Buttons */}
+            <div className="mt-8 flex gap-4 flex-wrap">
+              <button className="px-6 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors duration-200">
+                Approve Changes
+              </button>
+              <button className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors duration-200">
+                Review Later
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
