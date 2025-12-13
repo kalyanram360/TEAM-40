@@ -16,7 +16,7 @@
           "shortDescription": "Variables, data types, and operators in Python.",
           "duration": "1 hour",
           "lessons": 6,
-          "fullDescription": "Start your Python journey with variables, basic data types (integers, floats, strings, booleans), and operators. Understand how Python stores and manipulates data."
+          "fullDescription": "Start your Python journey with variables, basic data types (integers, floats, strings, booleans), and operators."
         },
         {
           "id": 2,
@@ -24,22 +24,22 @@
           "shortDescription": "If statements, loops, and conditional logic.",
           "duration": "1.5 hours",
           "lessons": 7,
-          "fullDescription": "Master control flow with if-else statements, for loops, while loops, and nested conditions. Learn how to direct program execution based on conditions."
+          "fullDescription": "Master control flow with if-else statements, loops, and nested conditions."
         },
         {
           "id": 3,
           "title": "Functions and Modules",
-          "shortDescription": "Define functions, use built-in modules, and organize code.",
+          "shortDescription": "Define functions and organize code.",
           "duration": "2 hours",
           "lessons": 9,
-          "fullDescription": "Write reusable code with functions, understand scope and namespaces, and explore Python's rich standard library. Learn to organize your code into modules."
+          "fullDescription": "Write reusable code using functions and Python modules."
         }
       ]
     },
     {
       "id": 2,
       "courseName": "Machine Learning Essentials",
-      "description": "Understand the core concepts of machine learning. Learn supervised learning, unsupervised learning, and how to build predictive models using scikit-learn and real datasets.",
+      "description": "Understand the core concepts of machine learning using scikit-learn and real datasets.",
       "instructor": "Dr. Maria Rodriguez",
       "duration": "8 weeks",
       "level": "Intermediate",
@@ -48,41 +48,41 @@
         {
           "id": 1,
           "title": "ML Fundamentals",
-          "shortDescription": "Core concepts of supervised and unsupervised learning.",
+          "shortDescription": "Supervised and unsupervised learning.",
           "duration": "1.5 hours",
           "lessons": 8,
-          "fullDescription": "Understand what machine learning is, the difference between supervised and unsupervised learning, and the machine learning workflow. Learn about training and testing data."
+          "fullDescription": "Understand the machine learning workflow and data preparation."
         },
         {
           "id": 2,
           "title": "Regression Models",
-          "shortDescription": "Linear regression, polynomial regression, and evaluation metrics.",
+          "shortDescription": "Linear and polynomial regression.",
           "duration": "2 hours",
           "lessons": 10,
-          "fullDescription": "Learn how to predict continuous values using regression. Understand linear and polynomial regression, cost functions, and how to evaluate model performance."
+          "fullDescription": "Predict continuous values using regression techniques."
         },
         {
           "id": 3,
           "title": "Classification Models",
-          "shortDescription": "Logistic regression, decision trees, and ensemble methods.",
+          "shortDescription": "Logistic regression and tree models.",
           "duration": "2.5 hours",
           "lessons": 12,
-          "fullDescription": "Build classifiers that predict categories. Explore logistic regression, decision trees, random forests, and gradient boosting for classification tasks."
+          "fullDescription": "Build models to classify data into categories."
         },
         {
           "id": 4,
           "title": "Clustering",
-          "shortDescription": "K-means, hierarchical clustering, and DBSCAN.",
+          "shortDescription": "K-means and DBSCAN.",
           "duration": "1.5 hours",
           "lessons": 7,
-          "fullDescription": "Discover patterns in data using unsupervised learning. Master K-means clustering, hierarchical methods, and density-based clustering techniques."
+          "fullDescription": "Discover patterns using unsupervised learning."
         }
       ]
     },
     {
       "id": 3,
       "courseName": "Deep Learning with Neural Networks",
-      "description": "Build and train deep neural networks using TensorFlow and Keras. Learn about CNNs, RNNs, and modern architectures for computer vision and natural language processing.",
+      "description": "Build deep neural networks using TensorFlow and Keras.",
       "instructor": "Prof. James Mitchell",
       "duration": "10 weeks",
       "level": "Advanced",
@@ -91,41 +91,41 @@
         {
           "id": 1,
           "title": "Neural Network Basics",
-          "shortDescription": "Perceptrons, activation functions, and backpropagation.",
+          "shortDescription": "Perceptrons and backpropagation.",
           "duration": "2 hours",
           "lessons": 9,
-          "fullDescription": "Understand how neural networks work from first principles. Learn about neurons, activation functions, layers, and the backpropagation algorithm."
+          "fullDescription": "Learn how neural networks work."
         },
         {
           "id": 2,
-          "title": "Convolutional Neural Networks",
-          "shortDescription": "CNN architecture for image recognition and computer vision.",
+          "title": "CNNs",
+          "shortDescription": "Image-based deep learning.",
           "duration": "2.5 hours",
           "lessons": 11,
-          "fullDescription": "Master CNNs for processing images. Learn about convolution, pooling, and modern architectures like ResNet and VGG. Build image classifiers."
+          "fullDescription": "Build image classifiers using CNNs."
         },
         {
           "id": 3,
-          "title": "Recurrent Neural Networks",
-          "shortDescription": "LSTM, GRU, and sequence modeling for time series data.",
+          "title": "RNNs",
+          "shortDescription": "Sequence models.",
           "duration": "2 hours",
           "lessons": 10,
-          "fullDescription": "Process sequential data with RNNs, LSTMs, and GRUs. Learn to handle time series, text sequences, and build models that understand temporal patterns."
+          "fullDescription": "Handle sequential and time-series data."
         },
         {
           "id": 4,
           "title": "Transfer Learning",
-          "shortDescription": "Leverage pre-trained models for your own tasks.",
+          "shortDescription": "Pre-trained models.",
           "duration": "1.5 hours",
           "lessons": 7,
-          "fullDescription": "Use pre-trained models to accelerate your projects. Learn fine-tuning strategies and how to adapt existing architectures for new tasks."
+          "fullDescription": "Use pre-trained networks for faster training."
         }
       ]
     },
     {
       "id": 4,
       "courseName": "Natural Language Processing",
-      "description": "Process and analyze human language with NLP techniques. Learn tokenization, embeddings, and transformers. Build chatbots and text classification systems.",
+      "description": "Analyze and process human language.",
       "instructor": "Dr. Sarah Thompson",
       "duration": "9 weeks",
       "level": "Advanced",
@@ -134,26 +134,115 @@
         {
           "id": 1,
           "title": "NLP Fundamentals",
-          "shortDescription": "Tokenization, preprocessing, and text analysis.",
+          "shortDescription": "Text preprocessing.",
           "duration": "1.5 hours",
           "lessons": 8,
-          "fullDescription": "Start with the basics of NLP. Learn tokenization, stemming, lemmatization, and how to preprocess text data for machine learning models."
+          "fullDescription": "Tokenization, stemming, and lemmatization."
         },
         {
           "id": 2,
           "title": "Word Embeddings",
-          "shortDescription": "Word2Vec, GloVe, and representation learning.",
+          "shortDescription": "Vector representations.",
           "duration": "2 hours",
           "lessons": 9,
-          "fullDescription": "Understand how to represent words as dense vectors. Learn Word2Vec, GloVe, and FastText embeddings for semantic understanding."
+          "fullDescription": "Word2Vec, GloVe, and FastText."
         },
         {
           "id": 3,
           "title": "Transformer Models",
-          "shortDescription": "BERT, GPT, and attention mechanisms.",
+          "shortDescription": "BERT and GPT.",
           "duration": "2.5 hours",
           "lessons": 11,
-          "fullDescription": "Master modern NLP with transformers. Learn attention mechanisms, fine-tune BERT and GPT models for your applications."
+          "fullDescription": "Modern transformer-based NLP models."
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "courseName": "Generative AI",
+      "description": "Learn modern generative AI systems and RAG.",
+      "instructor": "Dr. Ananya Rao",
+      "duration": "8 weeks",
+      "level": "Advanced",
+      "enrolled": "2,987 students",
+      "modules": [
+        {
+          "id": 1,
+          "title": "Introduction to Generative AI",
+          "shortDescription": "GenAI basics.",
+          "duration": "1.5 hours",
+          "lessons": 7,
+          "fullDescription": "Text, image, and code generation."
+        },
+        {
+          "id": 2,
+          "title": "Large Language Models",
+          "shortDescription": "LLM architecture.",
+          "duration": "2 hours",
+          "lessons": 9,
+          "fullDescription": "Transformers and pretraining."
+        },
+        {
+          "id": 3,
+          "title": "Prompt Engineering",
+          "shortDescription": "Effective prompts.",
+          "duration": "1.5 hours",
+          "lessons": 6,
+          "fullDescription": "Zero-shot and few-shot prompting."
+        },
+        {
+          "id": 4,
+          "title": "RAG",
+          "shortDescription": "LLMs with external data.",
+          "duration": "2 hours",
+          "lessons": 8,
+          "fullDescription": "Vector databases and retrieval pipelines."
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "courseName": "Machine Learning",
+      "description": "End-to-end machine learning pipeline.",
+      "instructor": "Dr. Ravi Kumar",
+      "duration": "10 weeks",
+      "level": "Intermediate",
+      "enrolled": "6,412 students",
+      "modules": [
+        {
+          "id": 1,
+          "title": "ML Overview",
+          "shortDescription": "ML concepts.",
+          "duration": "1.5 hours",
+          "lessons": 8,
+          "fullDescription": "Types of machine learning."
+        },
+        {
+          "id": 2,
+          "title": "Supervised Learning",
+          "shortDescription": "Regression and classification.",
+          "duration": "2.5 hours",
+          "lessons": 12,
+          "fullDescription": "Core supervised algorithms."
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "courseName": "Deep Learning",
+      "description": "Advanced neural networks.",
+      "instructor": "Prof. Kunal Mehta",
+      "duration": "12 weeks",
+      "level": "Advanced",
+      "enrolled": "4,038 students",
+      "modules": [
+        {
+          "id": 1,
+          "title": "Deep Learning Fundamentals",
+          "shortDescription": "Neural network basics.",
+          "duration": "2 hours",
+          "lessons": 9,
+          "fullDescription": "Activation and optimization."
         }
       ]
     }

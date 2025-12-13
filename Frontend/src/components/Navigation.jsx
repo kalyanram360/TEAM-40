@@ -1,5 +1,5 @@
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Briefcase } from 'lucide-react';
+import { Home, Briefcase, BarChart3 } from 'lucide-react';
 
 const Navigation = () => {
   const location = useLocation();
@@ -41,6 +41,17 @@ const Navigation = () => {
             >
               <Briefcase className="w-4 h-4" />
               Post Job
+            </Link>
+            <Link
+              to="/curriculum-updates"
+              className={`px-4 py-2 rounded-lg font-medium flex items-center gap-2 transition-all duration-200 ${
+                isActive('/curriculum-updates')
+                  ? 'bg-white/30 border-2 border-white'
+                  : 'hover:bg-white/20'
+              }`}
+            >
+              <BarChart3 className="w-4 h-4" />
+              Updates
             </Link>
           </div>
         </div>

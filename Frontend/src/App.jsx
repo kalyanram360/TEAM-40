@@ -3,6 +3,7 @@ import './App.css'
 import Navigation from './components/Navigation'
 import Course from './components/course'
 import JobForm from './components/JobForm'
+import CurriculumUpdates from './components/CurriculumUpdates'
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Course />} />
           <Route path="/post-job" element={<JobForm />} />
+          <Route path="/curriculum-updates" element={<CurriculumUpdates />} />
         </Routes>
       </div>
     </BrowserRouter>
