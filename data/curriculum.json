@@ -17,7 +17,7 @@
           "duration": "1 hour",
           "lessons": 6,
           "fullDescription": "Start your Python journey with variables, basic data types (integers, floats, strings, booleans), and operators."
-        },
+        }, 
         {
           "id": 2,
           "title": "Control Flow",
