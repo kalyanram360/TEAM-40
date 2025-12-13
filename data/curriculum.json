@@ -1,5 +1,4 @@
 {
-  "track": "AI Engineer",
   "courses": [
     {
       "id": 1,
@@ -202,7 +201,7 @@
     },
     {
       "id": 6,
-      "courseName": "Machine Learning",
+      "courseName": "AI Engineer",
       "description": "End-to-end machine learning pipeline.",
       "instructor": "Dr. Ravi Kumar",
       "duration": "10 weeks",
