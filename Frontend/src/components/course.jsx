@@ -1,68 +1,74 @@
 import React, { useState } from 'react';
-import { ChevronDown, BookOpen, Clock, Award, PlayCircle } from 'lucide-react';
+import { ChevronDown, BookOpen, Clock, Award, PlayCircle, ChevronLeft, ChevronRight } from 'lucide-react';
+import curriculum from '../../../data/curriculum.json';
 
-// Sample course data
-const sampleCourse = {
-  courseName: 'Introduction to React',
-  description: 'Learn the fundamentals of React, including components, state, props, and hooks. Build interactive web applications with ease.',
-  instructor: 'Sarah Johnson',
-  duration: '8 weeks',
-  level: 'Beginner',
-  enrolled: '12,458 students',
-  modules: [
-    {
-      id: 1,
-      title: 'Getting Started with React',
-      shortDescription: 'Understand what React is and set up your development environment.',
-      duration: '45 min',
-      lessons: 5,
-      fullDescription: 'In this foundational module, you\'ll discover what makes React special and why it\'s one of the most popular JavaScript libraries. We\'ll guide you through setting up your development environment with Node.js, npm, and create-react-app. You\'ll create your first React application and understand the basic project structure.'
-    },
-    {
-      id: 2,
-      title: 'Components and JSX',
-      shortDescription: 'Learn how to create functional and class components using JSX syntax.',
-      duration: '1.2 hours',
-      lessons: 7,
-      fullDescription: 'Dive deep into the heart of React - components. Learn the difference between functional and class components, understand JSX syntax, and discover how to compose complex UIs from simple building blocks. You\'ll practice creating reusable components and understand component composition patterns.'
-    },
-    {
-      id: 3,
-      title: 'State and Props',
-      shortDescription: 'Master the difference between state and props for data management.',
-      duration: '1.5 hours',
-      lessons: 8,
-      fullDescription: 'Master the core concepts of data flow in React. Understand how props enable parent-to-child communication and how state manages component-specific data. Learn best practices for lifting state up, prop drilling, and when to use each approach. Build interactive components that respond to user input.'
-    },
-    {
-      id: 4,
-      title: 'Hooks and Effects',
-      shortDescription: 'Explore React Hooks like useState and useEffect for managing side effects.',
-      duration: '2 hours',
-      lessons: 10,
-      fullDescription: 'Unlock the power of React Hooks and learn modern React development patterns. Master useState for state management, useEffect for side effects, and explore additional hooks like useContext, useReducer, and custom hooks. Understand the rules of hooks and common patterns for data fetching and subscriptions.'
-    },
-    {
-      id: 5,
-      title: 'Conditional Rendering and Lists',
-      shortDescription: 'Render components conditionally and efficiently display lists of data.',
-      duration: '1 hour',
-      lessons: 6,
-      fullDescription: 'Learn techniques for dynamic UIs that respond to application state. Master conditional rendering patterns using if-else, ternary operators, and logical AND. Understand how to efficiently render lists with the map function, the importance of keys, and performance optimization strategies for large datasets.'
-    }
-  ]
-};
-
-const Course = ({ course = sampleCourse, onModuleClick }) => {
+const Course = ({ onModuleClick }) => {
   const [expandedModule, setExpandedModule] = useState(null);
+  const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
+  
+  const courses = curriculum.courses;
+  const course = courses[currentCourseIndex];
   const { courseName, description, instructor, duration, level, enrolled, modules } = course;
 
   const toggleModule = (moduleId) => {
     setExpandedModule(expandedModule === moduleId ? null : moduleId);
   };
 
+  const nextCourse = () => {
+    setCurrentCourseIndex((prev) => (prev + 1) % courses.length);
+    setExpandedModule(null);
+  };
+
+  const prevCourse = () => {
+    setCurrentCourseIndex((prev) => (prev - 1 + courses.length) % courses.length);
+    setExpandedModule(null);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50">
+      {/* Course Navigation */}
+      <div className="bg-white border-b border-gray-200 sticky top-0 z-10">
+        <div className="max-w-6xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-sm text-gray-600">
+                {curriculum.track} Track • Course {currentCourseIndex + 1} of {courses.length}
+              </p>
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={prevCourse}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                aria-label="Previous course"
+              >
+                <ChevronLeft className="w-5 h-5 text-gray-600" />
+              </button>
+              <div className="flex gap-1">
+                {courses.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => {
+                      setCurrentCourseIndex(index);
+                      setExpandedModule(null);
+                    }}
+                    className={`w-2 h-2 rounded-full transition-all duration-200 ${
+                      index === currentCourseIndex ? 'bg-blue-600 w-8' : 'bg-gray-300'
+                    }`}
+                    aria-label={`Go to course ${index + 1}`}
+                  />
+                ))}
+              </div>
+              <button
+                onClick={nextCourse}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors duration-200"
+                aria-label="Next course"
+              >
+                <ChevronRight className="w-5 h-5 text-gray-600" />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
         <div className="max-w-6xl mx-auto px-6 py-16">
