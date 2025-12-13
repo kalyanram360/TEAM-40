@@ -7,11 +7,10 @@
         "python",
         "numpy",
         "pandas",
-        "data cleaning",
         "data preprocessing",
         "feature engineering"
       ],
-      "reason": "Establishes fundamental programming, data manipulation, and preparation skills essential for all AI/ML roles."
+      "reason": "Establishes core programming and data manipulation skills essential for all AI/ML roles."
     },
     {
       "title": "Core Machine Learning Concepts & Algorithms",
@@ -20,43 +19,33 @@
         "scikit-learn",
         "unsupervised learning"
       ],
-      "reason": "Covers foundational machine learning theory, algorithms, and practical implementation using a standard library."
+      "reason": "Covers fundamental machine learning theory and practical application using industry-standard libraries."
     },
     {
-      "title": "Deep Learning Frameworks & Architectures",
+      "title": "Deep Learning Architectures & Frameworks",
       "skills": [
         "deep learning",
         "pytorch",
         "tensorflow"
       ],
-      "reason": "Addresses the core of modern AI, focusing on popular deep learning frameworks and their application."
+      "reason": "Addresses the high demand for deep learning expertise and proficiency in leading frameworks."
     },
     {
-      "title": "MLOps & Model Deployment",
+      "title": "Computer Vision Fundamentals",
+      "skills": [
+        "computer vision",
+        "opencv"
+      ],
+      "reason": "Covers a highly trending and specialized area within AI, requiring dedicated practical skills."
+    },
+    {
+      "title": "AI/ML Model Deployment & MLOps",
       "skills": [
         "model deployment",
         "docker",
         "fastapi"
       ],
-      "reason": "Crucial for taking AI models from development to production, covering deployment strategies and tools."
-    },
-    {
-      "title": "Natural Language Processing (NLP)",
-      "skills": [
-        "nlp",
-        "embeddings",
-        "hugging face",
-        "langchain"
-      ],
-      "reason": "Dedicated module for a major AI subfield, including modern tools and techniques for text data."
-    },
-    {
-      "title": "Computer Vision",
-      "skills": [
-        "computer vision",
-        "opencv"
-      ],
-      "reason": "Dedicated module for another major AI subfield, covering image and video processing with a key library."
+      "reason": "Crucial for bringing AI/ML models to production, a key skill for AI Engineers in real-world applications."
     }
   ]
 }

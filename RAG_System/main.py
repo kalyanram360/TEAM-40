@@ -94,7 +94,7 @@ print(json.dumps(gap_analysis_result, indent=2))
 # Also save to file
 output_dir = Path(__file__).parent.parent / "Frontend" / "public"
 output_dir.mkdir(parents=True, exist_ok=True)  # Create directory if it doesn't exist
-output_file = output_dir / "gap_analysis_result.json"
+output_file = output_dir / f"gap_analysis_{SELECTED_COURSE_ID}.json"
 with open(output_file, "w") as f:
     json.dump(gap_analysis_result, f, indent=2)
 print(f"\n✓ Results saved to: {output_file}")

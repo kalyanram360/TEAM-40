@@ -58,5 +58,35 @@
     "salary": "7-12 LPA",
     "jobType": "Full-time",
     "postedAt": "2025-11-30T10:05:12.701Z"
+  },
+  {
+    "id": 1765665593028,
+    "title": "AI Engineer",
+    "description": "Looking for an AI Engineer to work on computer vision and deep learning models.\\nResponsibilities\\n✅ Image classification and object detection\\n✅ Model training and optimization\\nTools\\nTensorFlow, OpenCV, Python\\nRequirements\\nExperience with CNNs and vision datasets",
+    "company": "VisionNext",
+    "location": "Visakhapatnam",
+    "salary": "5-10 lpa",
+    "jobType": "Full-time",
+    "postedAt": "2025-12-13T22:39:53.028Z"
+  },
+  {
+    "id": 1765666468285,
+    "title": "AI Engineer",
+    "description": "Looking for an AI Engineer to work on computer vision and deep learning models.\\nResponsibilities\\n✅ Image classification and object detection\\n✅ Model training and optimization\\nTools\\nTensorFlow, OpenCV, Python\\nRequirements\\nExperience with CNNs and vision datasets",
+    "company": "vvvv",
+    "location": "Visakhapatnam",
+    "salary": "5-20 L",
+    "jobType": "Full-time",
+    "postedAt": "2025-12-13T22:54:28.285Z"
+  },
+  {
+    "id": 1765666672356,
+    "title": "AI Engineer",
+    "description": "Looking for an AI Engineer to work on computer vision and deep learning models.\\nResponsibilities\\n✅ Image classification and object detection\\n✅ Model training and optimization\\nTools\\nTensorFlow, OpenCV, Python\\nRequirements\\nExperience with CNNs and vision datasets",
+    "company": "vvvv",
+    "location": "Visakhapatnam",
+    "salary": "5-6L",
+    "jobType": "Full-time",
+    "postedAt": "2025-12-13T22:57:52.356Z"
   }
 ]

@@ -60,33 +60,21 @@ def analyze_gap(course_name: str, course_id: int, retrieved_job_chunks: list, cu
         curriculum_context.append(module_info)
     
     # Construct simplified RAG prompt with explicit JSON schema
-    prompt = f"""You are a curriculum gap analyzer. Analyze the job market data and current curriculum, then return recommendations.
+    prompt = f"""You are a curriculum gap analyzer. Return ONLY valid JSON.
 
-**Job Market Skills (from real job postings):**
-{json.dumps(job_evidence, indent=2)}
+**Job Market Skills:**
+{json.dumps(trending_skills[:10])}
 
-**Current Curriculum Modules:**
-{json.dumps(curriculum_context, indent=2)}
+**Current Modules:**
+{json.dumps([{"id": m["metadata"].get("moduleId"), "title": m["metadata"].get("moduleTitle")} for m in curriculum_modules[:5]])}
 
-**Trending Skills (>30% frequency):**
-{json.dumps(trending_skills[:15])}
-
-**Task:**
-1. Identify modules that should be DELETED (outdated/irrelevant based on job market)
-2. Identify modules that should be ADDED (missing critical skills from job market)
-
-**IMPORTANT:** Return ONLY valid JSON with this EXACT structure:
-
+Return JSON in this exact format:
 {{
-  "modulesToDelete": [
-    {{"id": 1, "title": "Module Name", "reason": "Brief reason"}}
-  ],
+  "modulesToDelete": [],
   "modulesToAdd": [
-    {{"title": "New Module Name", "skills": ["skill1", "skill2"], "reason": "Brief reason"}}
+    {{"title": "Module Name", "skills": ["skill1"], "reason": "Reason"}}
   ]
-}}
-
-Return complete, valid JSON only. No markdown, no extra text."""
+}}"""
 
     try:
         # Call Gemini API with increased token limit
@@ -94,7 +82,7 @@ Return complete, valid JSON only. No markdown, no extra text."""
             prompt,
             generation_config=genai.types.GenerationConfig(
                 temperature=0.0,
-                max_output_tokens=2048,  # Increased from 1000
+                max_output_tokens=4096,  # Increased to ensure complete response
                 top_p=1.0
             )
         )

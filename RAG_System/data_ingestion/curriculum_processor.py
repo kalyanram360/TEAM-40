@@ -20,6 +20,7 @@ def process_curriculum(curriculum_path: str = None):
     
     # Process each course
     for course in curriculum.get("courses", []):
+        course_id = course.get("id")
         course_name = course.get("courseName", "")
         
         # Process each module in the course
@@ -34,6 +35,7 @@ def process_curriculum(curriculum_path: str = None):
             module_chunk = {
                 "text": f"{module_title}\n{module_desc}",
                 "metadata": {
+                    "courseId": course_id,
                     "courseName": course_name,
                     "moduleId": module_id,
                     "moduleTitle": module_title,
