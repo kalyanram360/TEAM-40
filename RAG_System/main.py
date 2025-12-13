@@ -12,67 +12,73 @@ import json
 from pathlib import Path
 
 # ================== CONFIGURATION ==================
-SELECTED_COURSE = "AI Engineer"  # Change this to analyze different courses
-TOP_K_JOB_CHUNKS = 10  # Number of job chunks to retrieve
-SKILL_TRENDING_THRESHOLD = 0.30  # 30% = trending
+SELECTED_COURSE_ID = 6  # Course ID for "AI Engineer"
+SKILL_TRENDING_THRESHOLD = 0.30
 
-# ================== STEP 1: Load & Clean Jobs ==================
-print("[STEP 1] Loading and cleaning job data...")
+# ================== STEP 1: Load Data ==================
+print("[STEP 1] Loading curriculum and job data...")
+curriculum, all_curriculum_modules = process_curriculum()
 job_chunks, job_skills_list = clean_jobs()
+print(f"  ✓ Loaded {len(all_curriculum_modules)} curriculum modules")
 print(f"  ✓ Loaded {len(job_chunks)} job chunks from {len(job_skills_list)} jobs")
 
+# Get selected course
+selected_course = None
+selected_course_modules = []
+
+for course in curriculum.get("courses", []):
+    if course["id"] == SELECTED_COURSE_ID:
+        selected_course = course
+        selected_course_modules = [
+            m for m in all_curriculum_modules 
+            if m["metadata"].get("courseId") == SELECTED_COURSE_ID
+        ]
+        break
+
+if not selected_course:
+    print(f"  ❌ Course ID {SELECTED_COURSE_ID} not found")
+    exit(1)
+
+SELECTED_COURSE = selected_course["courseName"]
+print(f"  ✓ Selected course: {SELECTED_COURSE} (ID: {SELECTED_COURSE_ID})")
+print(f"  ✓ Found {len(selected_course_modules)} modules for this course")
+
 # ================== STEP 2: Calculate Skill Trends ==================
-print("\n[STEP 2] Calculating skill trends from retrieved jobs...")
+print("\n[STEP 2] Calculating skill trends from all jobs...")
 skill_frequency = calculate_trends(job_skills_list)
 trending_skills = get_trending_skills(skill_frequency, len(job_skills_list), SKILL_TRENDING_THRESHOLD)
 print(f"  ✓ Found {len(skill_frequency)} unique skills")
 print(f"  ✓ {len(trending_skills)} trending skills (>= 30% frequency)")
 print(f"  Sample trending skills: {trending_skills[:10]}")
 
-# ================== STEP 3: Build Job Vector Store ==================
-print("\n[STEP 3] Building vector store for job market chunks...")
-job_vector_store = VectorStore()
+# ================== STEP 3: Match Jobs to Course ==================
+print(f"\n[STEP 3] Matching jobs to '{SELECTED_COURSE}' course...")
 
-# Extract only text and metadata for vector store
-job_texts = [chunk["text"] for chunk in job_chunks]
-job_metadata = [chunk["metadata"] for chunk in job_chunks]
+matched_job_chunks = []
+for chunk in job_chunks:
+    job_skills = chunk["metadata"].get("extractedSkills", [])
+    if any(skill.lower() in [s.lower() for s in trending_skills] for skill in job_skills):
+        matched_job_chunks.append(chunk)
 
-job_vector_store.build_index(job_texts, job_metadata)
-print(f"  ✓ Built FAISS index with {len(job_texts)} chunks")
+print(f"  ✓ Matched {len(matched_job_chunks)} jobs with course skills")
 
-# ================== STEP 4: Process Curriculum ==================
-print("\n[STEP 4] Processing curriculum modules...")
-curriculum, all_curriculum_modules = process_curriculum()
-print(f"  ✓ Loaded {len(all_curriculum_modules)} total curriculum modules")
-
-# Filter modules for the selected course
-selected_course_modules = [
-    m for m in all_curriculum_modules 
-    if m["metadata"].get("courseName") == SELECTED_COURSE
-]
-print(f"  ✓ Found {len(selected_course_modules)} modules in '{SELECTED_COURSE}'")
-
-# ================== STEP 5: Retrieve Job Chunks via RAG ==================
-print(f"\n[STEP 5] Retrieving relevant job chunks for '{SELECTED_COURSE}' role...")
-query = f"{SELECTED_COURSE} skills requirements tools frameworks"
-retrieved_job_chunks = job_vector_store.retrieve(query, k=TOP_K_JOB_CHUNKS)
-print(f"  ✓ Retrieved {len(retrieved_job_chunks)} relevant job market chunks")
-
-# Display retrieved job evidence
-print("\n  Retrieved Job Evidence:")
-for i, chunk in enumerate(retrieved_job_chunks, 1):
+print("\n  Matched Jobs:")
+for i, chunk in enumerate(matched_job_chunks[:10], 1):
     job_title = chunk["metadata"].get("jobTitle")
     company = chunk["metadata"].get("company")
     skills = chunk["metadata"].get("extractedSkills", [])
     print(f"    {i}. {job_title} @ {company}")
     print(f"       Skills: {', '.join(skills[:5])}")
 
-# ================== STEP 6: RAG-Based Gap Analysis ==================
-print(f"\n[STEP 6] Running RAG-based gap analysis for '{SELECTED_COURSE}'...")
-print("  Using ONLY retrieved job chunks for LLM reasoning (no prior knowledge)...")
+retrieved_job_chunks = matched_job_chunks[:10]
+
+# ================== STEP 4: Gap Analysis ==================
+print(f"\n[STEP 4] Running gap analysis for '{SELECTED_COURSE}'...")
+print("  Analyzing curriculum against matched job market data...")
 
 gap_analysis_result = analyze_gap(
     course_name=SELECTED_COURSE,
+    course_id=SELECTED_COURSE_ID,
     retrieved_job_chunks=retrieved_job_chunks,
     curriculum_modules=selected_course_modules,
     trending_skills=trending_skills,
@@ -80,14 +86,12 @@ gap_analysis_result = analyze_gap(
 )
 
 print("\n" + "="*60)
-print("RAG CURRICULUM GAP ANALYSIS RESULTS")
+print(f"CURRICULUM GAP ANALYSIS RESULTS - {SELECTED_COURSE}")
 print("="*60)
 
-# Output STRICT JSON (no explanations)
 print(json.dumps(gap_analysis_result, indent=2))
 
-# Also save to file
-output_file = Path(__file__).parent / "gap_analysis_result.json"
+output_file = Path(__file__).parent / f"gap_analysis_{SELECTED_COURSE_ID}.json"
 with open(output_file, "w") as f:
     json.dump(gap_analysis_result, f, indent=2)
 print(f"\n✓ Results saved to: {output_file}")
