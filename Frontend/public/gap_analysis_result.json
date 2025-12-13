@@ -1,0 +1,62 @@
+{
+  "modulesToDelete": [],
+  "modulesToAdd": [
+    {
+      "title": "Python for Data Science & ML Foundations",
+      "skills": [
+        "python",
+        "numpy",
+        "pandas",
+        "data cleaning",
+        "data preprocessing",
+        "feature engineering"
+      ],
+      "reason": "Establishes fundamental programming, data manipulation, and preparation skills essential for all AI/ML roles."
+    },
+    {
+      "title": "Core Machine Learning Concepts & Algorithms",
+      "skills": [
+        "machine learning",
+        "scikit-learn",
+        "unsupervised learning"
+      ],
+      "reason": "Covers foundational machine learning theory, algorithms, and practical implementation using a standard library."
+    },
+    {
+      "title": "Deep Learning Frameworks & Architectures",
+      "skills": [
+        "deep learning",
+        "pytorch",
+        "tensorflow"
+      ],
+      "reason": "Addresses the core of modern AI, focusing on popular deep learning frameworks and their application."
+    },
+    {
+      "title": "MLOps & Model Deployment",
+      "skills": [
+        "model deployment",
+        "docker",
+        "fastapi"
+      ],
+      "reason": "Crucial for taking AI models from development to production, covering deployment strategies and tools."
+    },
+    {
+      "title": "Natural Language Processing (NLP)",
+      "skills": [
+        "nlp",
+        "embeddings",
+        "hugging face",
+        "langchain"
+      ],
+      "reason": "Dedicated module for a major AI subfield, including modern tools and techniques for text data."
+    },
+    {
+      "title": "Computer Vision",
+      "skills": [
+        "computer vision",
+        "opencv"
+      ],
+      "reason": "Dedicated module for another major AI subfield, covering image and video processing with a key library."
+    }
+  ]
+}

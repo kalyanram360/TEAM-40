@@ -1,66 +1,72 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ChevronDown, BookOpen, Clock, Award, PlayCircle, ChevronLeft, ChevronRight, Trash2, Plus } from 'lucide-react';
 import curriculum from '../../../data/curriculum.json';
-
-// Hardcoded curriculum changes - mapped by course ID
-const curriculumChanges = {
-  1: { // Python Fundamentals
-    modulesToRemove: [],
-    modulesToAdd: [
-      {
-        title: 'Python for Data Science',
-        description: 'Learn NumPy, Pandas, and data manipulation libraries essential for modern Python development.'
-      }
-    ]
-  },
-  2: { // Machine Learning Essentials
-    modulesToRemove: [
-      { id: 2, title: 'Regression Models', description: 'Linear regression, polynomial regression, and evaluation metrics.' }
-    ],
-    modulesToAdd: [
-      {
-        title: 'Advanced Transformer Models',
-        description: 'Master BERT, GPT, and attention mechanisms for production NLP.'
-      },
-      {
-        title: 'Vector Databases & RAG',
-        description: 'Learn Retrieval-Augmented Generation for intelligent retrieval systems.'
-      }
-    ]
-  },
-  3: { // Deep Learning
-    modulesToRemove: [],
-    modulesToAdd: [
-      {
-        title: 'Generative AI & LLMs',
-        description: 'Understand large language models and prompt engineering.'
-      },
-      {
-        title: 'Multi-Modal Learning',
-        description: 'Learn to build models that process text, images, and audio together.'
-      }
-    ]
-  },
-  4: { // NLP
-    modulesToRemove: [],
-    modulesToAdd: [
-      {
-        title: 'LLM Fine-tuning at Scale',
-        description: 'Master techniques for fine-tuning large language models efficiently.'
-      }
-    ]
-  }
-};
 
 const Course = ({ onModuleClick }) => {
   const [expandedModule, setExpandedModule] = useState(null);
   const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
   const [expandedChanges, setExpandedChanges] = useState({});
+  const [gapAnalysisResults, setGapAnalysisResults] = useState({});
+  const [loading, setLoading] = useState(true);
+  
+  // Load gap analysis results from RAG system
+  useEffect(() => {
+    const loadGapAnalysis = async () => {
+      try {
+        const results = {};
+        
+        // Try to load gap analysis for each course
+        for (const course of curriculum.courses) {
+          // Try multiple possible paths for the gap analysis files
+          const paths = [
+            `/gap_analysis_${course.id}.json`, // Frontend public folder (preferred)
+            `../../RAG_System/gap_analysis_${course.id}.json`, // Relative to Frontend folder
+          ];
+          
+          let loaded = false;
+          for (const path of paths) {
+            try {
+              console.log(`Trying to fetch gap analysis from: ${path}`);
+              const response = await fetch(path);
+              if (response.ok) {
+                const data = await response.json();
+                results[course.id] = data;
+                console.log(`✓ Successfully loaded gap analysis for course ${course.id} from ${path}`);
+                loaded = true;
+                break;
+              }
+            } catch (err) {
+              console.log(`✗ Failed to fetch from ${path}`);
+              // Try next path
+            }
+          }
+          
+          if (!loaded) {
+            // No gap analysis file found, use empty defaults
+            console.warn(`No gap analysis file found for course ${course.id}, using defaults`);
+            results[course.id] = {
+              modulesToDelete: [],
+              modulesToAdd: []
+            };
+          }
+        }
+        
+        console.log('Gap analysis results loaded:', results);
+        setGapAnalysisResults(results);
+      } catch (error) {
+        console.error('Error loading gap analysis results:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadGapAnalysis();
+  }, []);
   
   const courses = curriculum.courses;
   const course = courses[currentCourseIndex];
-  const { courseName, description, instructor, duration, level, enrolled, modules } = course;
-  const changes = curriculumChanges[course.id] || { modulesToRemove: [], modulesToAdd: [] };
+  const { id, courseName, description, instructor, duration, level, enrolled, modules } = course;
+  const changes = gapAnalysisResults[id] || { modulesToDelete: [], modulesToAdd: [] };
 
   const toggleModule = (moduleId) => {
     setExpandedModule(expandedModule === moduleId ? null : moduleId);
@@ -252,7 +258,7 @@ const Course = ({ onModuleClick }) => {
         </div>
 
         {/* Curriculum Updates Section */}
-        {(changes.modulesToRemove.length > 0 || changes.modulesToAdd.length > 0) && (
+        {!loading && (changes.modulesToDelete?.length > 0 || changes.modulesToAdd?.length > 0) && (
           <div className="mt-16">
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-2">Recommended Curriculum Updates</h2>
@@ -263,18 +269,18 @@ const Course = ({ onModuleClick }) => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Modules to Remove */}
-              {changes.modulesToRemove.length > 0 && (
+              {changes.modulesToDelete && changes.modulesToDelete.length > 0 && (
                 <div>
                   <div className="flex items-center gap-3 mb-6">
                     <Trash2 className="w-6 h-6 text-red-600" />
                     <h3 className="text-2xl font-bold text-gray-900">Modules to Remove</h3>
                     <span className="ml-auto bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">
-                      {changes.modulesToRemove.length}
+                      {changes.modulesToDelete.length}
                     </span>
                   </div>
 
                   <div className="space-y-3">
-                    {changes.modulesToRemove.map((module, index) => (
+                    {changes.modulesToDelete.map((module, index) => (
                       <div
                         key={index}
                         onClick={() => setExpandedChanges(prev => ({ ...prev, [`remove-${index}`]: !prev[`remove-${index}`] }))}
@@ -286,8 +292,8 @@ const Course = ({ onModuleClick }) => {
                           </div>
                           <div className="flex-1">
                             <h4 className="font-semibold text-gray-900">{module.title}</h4>
-                            <p className="text-sm text-red-600 mt-1">ID: {module.id}</p>
-                            <p className="text-sm text-gray-600 mt-2">{module.description}</p>
+                            {module.id && <p className="text-sm text-red-600 mt-1">ID: {module.id}</p>}
+                            {module.reason && <p className="text-sm text-gray-600 mt-2">{module.reason}</p>}
                             {expandedChanges[`remove-${index}`] && (
                               <div className="mt-3 p-3 bg-red-50 border border-red-100 rounded text-sm text-red-800">
                                 Less relevant based on job market demand. Consider archiving instead of deletion.
@@ -302,7 +308,7 @@ const Course = ({ onModuleClick }) => {
               )}
 
               {/* Modules to Add */}
-              {changes.modulesToAdd.length > 0 && (
+              {changes.modulesToAdd && changes.modulesToAdd.length > 0 && (
                 <div>
                   <div className="flex items-center gap-3 mb-6">
                     <Plus className="w-6 h-6 text-green-600" />
@@ -325,10 +331,16 @@ const Course = ({ onModuleClick }) => {
                           </div>
                           <div className="flex-1">
                             <h4 className="font-semibold text-gray-900">{module.title}</h4>
-                            <p className="text-sm text-gray-600 mt-2">{module.description}</p>
+                            {module.skills && (
+                              <p className="text-sm text-green-600 mt-1">
+                                Skills: {module.skills.join(', ')}
+                              </p>
+                            )}
+                            {module.reason && <p className="text-sm text-gray-600 mt-2">{module.reason}</p>}
+                            {module.description && !module.reason && <p className="text-sm text-gray-600 mt-2">{module.description}</p>}
                             {expandedChanges[`add-${index}`] && (
                               <div className="mt-3 p-3 bg-green-50 border border-green-100 rounded text-sm text-green-800">
-                                In high demand ({Math.floor(Math.random() * 40 + 60)}% of job listings). Critical for keeping curriculum relevant.
+                                In high demand based on job market analysis. Critical for keeping curriculum relevant.
                               </div>
                             )}
                           </div>
@@ -349,6 +361,12 @@ const Course = ({ onModuleClick }) => {
                 Review Later
               </button>
             </div>
+          </div>
+        )}
+        
+        {loading && (
+          <div className="mt-16 text-center py-8">
+            <p className="text-gray-500">Loading curriculum recommendations...</p>
           </div>
         )}
       </div>
