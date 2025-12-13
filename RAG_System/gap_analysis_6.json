@@ -1,0 +1,56 @@
+{
+  "modulesToDelete": [],
+  "modulesToAdd": [
+    {
+      "title": "Machine Learning Fundamentals & Data Engineering",
+      "skills": [
+        "machine learning",
+        "data preprocessing",
+        "feature engineering",
+        "data cleaning",
+        "numpy",
+        "pandas",
+        "scikit-learn",
+        "unsupervised learning"
+      ],
+      "reason": "Establishes a strong foundation in traditional machine learning concepts, essential data preparation techniques, and core Python libraries for data science, which are universally required."
+    },
+    {
+      "title": "Deep Learning with PyTorch & TensorFlow",
+      "skills": [
+        "deep learning",
+        "pytorch",
+        "tensorflow",
+        "embeddings"
+      ],
+      "reason": "Covers the critical deep learning paradigms and the two most prominent frameworks (PyTorch and TensorFlow) consistently demanded in AI Engineer roles, including advanced concepts like embeddings."
+    },
+    {
+      "title": "AI Model Deployment & MLOps",
+      "skills": [
+        "model deployment",
+        "docker",
+        "fastapi"
+      ],
+      "reason": "Addresses the crucial gap in deploying AI models from development to production, incorporating modern tools like Docker for containerization and FastAPI for API development, which are vital for real-world applications."
+    },
+    {
+      "title": "Natural Language Processing (NLP) & LLM Applications",
+      "skills": [
+        "nlp",
+        "hugging face",
+        "langchain",
+        "embeddings"
+      ],
+      "reason": "Focuses on the highly trending and in-demand field of Natural Language Processing, including practical application with modern frameworks like Hugging Face and LangChain for Large Language Models."
+    },
+    {
+      "title": "Computer Vision with OpenCV",
+      "skills": [
+        "computer vision",
+        "opencv"
+      ],
+      "reason": "Provides specialized knowledge and practical skills in computer vision, a significant and growing area of AI, utilizing the widely adopted OpenCV library."
+    }
+  ]
+}
