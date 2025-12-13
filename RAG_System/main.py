@@ -18,7 +18,7 @@ for job in jobs:
 
 trends = calculate_trends(all_skills)
 
-with open("data/curriculum.json") as f:
+with open(r"D:\GENAI_hackathon\TEAM-40\data\curriculum.json") as f:
     curriculum = json.load(f)
 
 gap_report = analyze_gap(curriculum, trends)

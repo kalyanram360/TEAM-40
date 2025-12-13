@@ -1,7 +1,7 @@
 import json, re
 
 def clean_jobs():
-    with open("data/jobs.json") as f:
+    with open(r"D:\GENAI_hackathon\TEAM-40\data\jobs.json") as f:
         jobs = json.load(f)
 
     cleaned = []
