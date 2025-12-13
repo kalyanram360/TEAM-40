@@ -1,7 +1,11 @@
 import json, re
+from pathlib import Path
 
 def clean_jobs():
-    with open(r"D:\GENAI_hackathon\TEAM-40\data\jobs.json") as f:
+    # Use relative path
+    jobs_file = Path(__file__).parent.parent.parent / "data" / "jobs.json"
+    
+    with open(jobs_file) as f:
         jobs = json.load(f)
 
     cleaned = []
