@@ -1,73 +1,72 @@
-import React, { useState } from 'react';
-import { ChevronDown, BookOpen, Clock, Award, PlayCircle, ChevronLeft, ChevronRight, Trash2, Plus, Star, Mail, Linkedin, Github, Twitter } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, BookOpen, Clock, Award, PlayCircle, ChevronLeft, ChevronRight, Trash2, Plus } from 'lucide-react';
 import curriculum from '../../../data/curriculum.json';
-import instructors from '../../../data/instructors.json';
-
-// Hardcoded curriculum changes - mapped by course ID
-const curriculumChanges = {
-  1: { // Python Fundamentals
-    modulesToRemove: [],
-    modulesToAdd: [
-      {
-        title: 'Python for Data Science',
-        description: 'Learn NumPy, Pandas, and data manipulation libraries essential for modern Python development.'
-      }
-    ]
-  },
-  2: { // Machine Learning Essentials
-    modulesToRemove: [
-      { id: 2, title: 'Regression Models', description: 'Linear regression, polynomial regression, and evaluation metrics.' }
-    ],
-    modulesToAdd: [
-      {
-        title: 'Advanced Transformer Models',
-        description: 'Master BERT, GPT, and attention mechanisms for production NLP.'
-      },
-      {
-        title: 'Vector Databases & RAG',
-        description: 'Learn Retrieval-Augmented Generation for intelligent retrieval systems.'
-      }
-    ]
-  },
-  3: { // Deep Learning
-    modulesToRemove: [],
-    modulesToAdd: [
-      {
-        title: 'Generative AI & LLMs',
-        description: 'Understand large language models and prompt engineering.'
-      },
-      {
-        title: 'Multi-Modal Learning',
-        description: 'Learn to build models that process text, images, and audio together.'
-      }
-    ]
-  },
-  4: { // NLP
-    modulesToRemove: [],
-    modulesToAdd: [
-      {
-        title: 'LLM Fine-tuning at Scale',
-        description: 'Master techniques for fine-tuning large language models efficiently.'
-      }
-    ]
-  }
-};
 
 const Course = ({ onModuleClick }) => {
   const [expandedModule, setExpandedModule] = useState(null);
   const [currentCourseIndex, setCurrentCourseIndex] = useState(0);
   const [expandedChanges, setExpandedChanges] = useState({});
-  const [expandedChanges, setExpandedChanges] = useState({});
+  const [gapAnalysisResults, setGapAnalysisResults] = useState({});
+  const [loading, setLoading] = useState(true);
+  
+  // Load gap analysis results from RAG system
+  useEffect(() => {
+    const loadGapAnalysis = async () => {
+      try {
+        const results = {};
+        
+        // Try to load gap analysis for each course
+        for (const course of curriculum.courses) {
+          // Try multiple possible paths for the gap analysis files
+          const paths = [
+            `/gap_analysis_${course.id}.json`, // Frontend public folder (preferred)
+            `../../RAG_System/gap_analysis_${course.id}.json`, // Relative to Frontend folder
+          ];
+          
+          let loaded = false;
+          for (const path of paths) {
+            try {
+              console.log(`Trying to fetch gap analysis from: ${path}`);
+              const response = await fetch(path);
+              if (response.ok) {
+                const data = await response.json();
+                results[course.id] = data;
+                console.log(`✓ Successfully loaded gap analysis for course ${course.id} from ${path}`);
+                loaded = true;
+                break;
+              }
+            } catch (err) {
+              console.log(`✗ Failed to fetch from ${path}`);
+              // Try next path
+            }
+          }
+          
+          if (!loaded) {
+            // No gap analysis file found, use empty defaults
+            console.warn(`No gap analysis file found for course ${course.id}, using defaults`);
+            results[course.id] = {
+              modulesToDelete: [],
+              modulesToAdd: []
+            };
+          }
+        }
+        
+        console.log('Gap analysis results loaded:', results);
+        setGapAnalysisResults(results);
+      } catch (error) {
+        console.error('Error loading gap analysis results:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    loadGapAnalysis();
+  }, []);
   
   const courses = curriculum.courses;
   const course = courses[currentCourseIndex];
-  const { courseName, description, instructor, duration, level, enrolled, modules } = course;
-  const changes = curriculumChanges[course.id] || { modulesToRemove: [], modulesToAdd: [] };
-
-  // Find instructor information from instructors.json
-  const instructorData = instructors.instructors.find(
-    (inst) => inst.name.toLowerCase() === instructor.toLowerCase()
-  );
+  const { id, courseName, description, instructor, duration, level, enrolled, modules } = course;
+  const changes = gapAnalysisResults[id] || { modulesToDelete: [], modulesToAdd: [] };
 
   const toggleModule = (moduleId) => {
     setExpandedModule(expandedModule === moduleId ? null : moduleId);
@@ -160,119 +159,6 @@ const Course = ({ onModuleClick }) => {
           </div>
         </div>
       </div>
-
-      {/* Instructor Profile Section */}
-      {instructorData && (
-        <div className="bg-white border-b border-gray-200">
-          <div className="max-w-6xl mx-auto px-6 py-12">
-            <h2 className="text-3xl font-bold text-gray-900 mb-8">Your Instructor</h2>
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
-              {/* Instructor Image & Basic Info */}
-              <div className="lg:col-span-1 flex flex-col items-center text-center">
-                <div className="mb-6 relative">
-                  <img 
-                    src={instructorData.image} 
-                    alt={instructorData.name}
-                    className="w-40 h-40 rounded-full shadow-lg border-4 border-blue-100"
-                  />
-                  <div className="absolute bottom-0 right-0 bg-yellow-400 text-white px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
-                    <Star className="w-4 h-4 fill-current" />
-                    <span className="font-bold">{instructorData.rating}</span>
-                  </div>
-                </div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">{instructorData.name}</h3>
-                <p className="text-blue-600 font-medium mb-4">{instructorData.title}</p>
-                
-                {/* Social Links */}
-                <div className="flex justify-center gap-3 mb-6">
-                  {instructorData.social.linkedin && (
-                    <a 
-                      href={instructorData.social.linkedin} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="p-3 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-full transition-colors duration-200"
-                      aria-label="LinkedIn"
-                    >
-                      <Linkedin className="w-5 h-5" />
-                    </a>
-                  )}
-                  {instructorData.social.github && (
-                    <a 
-                      href={instructorData.social.github} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="p-3 bg-gray-100 hover:bg-gray-800 hover:text-white rounded-full transition-colors duration-200"
-                      aria-label="GitHub"
-                    >
-                      <Github className="w-5 h-5" />
-                    </a>
-                  )}
-                  {instructorData.social.twitter && (
-                    <a 
-                      href={instructorData.social.twitter} 
-                      target="_blank" 
-                      rel="noopener noreferrer"
-                      className="p-3 bg-gray-100 hover:bg-blue-400 hover:text-white rounded-full transition-colors duration-200"
-                      aria-label="Twitter"
-                    >
-                      <Twitter className="w-5 h-5" />
-                    </a>
-                  )}
-                </div>
-
-                {/* Contact Button */}
-                <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2">
-                  <Mail className="w-4 h-4" />
-                  Contact
-                </button>
-              </div>
-
-              {/* Instructor Details */}
-              <div className="lg:col-span-3">
-                {/* Biography */}
-                <div className="mb-8">
-                  <h4 className="text-xl font-bold text-gray-900 mb-3">About the Instructor</h4>
-                  <p className="text-gray-700 leading-relaxed text-lg">{instructorData.bio}</p>
-                </div>
-
-                {/* Stats Grid */}
-                <div className="grid grid-cols-3 gap-4 mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
-                  <div className="text-center">
-                    <div className="text-3xl font-bold text-blue-600 mb-2">{instructorData.students}</div>
-                    <p className="text-sm text-gray-600">Students Taught</p>
-                  </div>
-                  <div className="text-center border-l border-r border-gray-300">
-                    <div className="text-3xl font-bold text-green-600 mb-2">{instructorData.reviews.toLocaleString()}</div>
-                    <p className="text-sm text-gray-600">Reviews</p>
-                  </div>
-                  <div className="text-center">
-                    <div className="flex items-center justify-center gap-1 mb-2">
-                      <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
-                      <span className="text-3xl font-bold text-yellow-500">{instructorData.rating}</span>
-                    </div>
-                    <p className="text-sm text-gray-600">Rating</p>
-                  </div>
-                </div>
-
-                {/* Expertise Tags */}
-                <div>
-                  <h4 className="text-lg font-bold text-gray-900 mb-4">Expertise & Specializations</h4>
-                  <div className="flex flex-wrap gap-3">
-                    {instructorData.expertise.map((skill, index) => (
-                      <span
-                        key={index}
-                        className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full font-medium text-sm hover:bg-blue-200 transition-colors duration-200"
-                      >
-                        {skill}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 py-12">
@@ -372,7 +258,7 @@ const Course = ({ onModuleClick }) => {
         </div>
 
         {/* Curriculum Updates Section */}
-        {(changes.modulesToRemove.length > 0 || changes.modulesToAdd.length > 0) && (
+        {!loading && (changes.modulesToDelete?.length > 0 || changes.modulesToAdd?.length > 0) && (
           <div className="mt-16">
             <div className="mb-8">
               <h2 className="text-3xl font-bold text-gray-900 mb-2">Recommended Curriculum Updates</h2>
@@ -383,18 +269,18 @@ const Course = ({ onModuleClick }) => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
               {/* Modules to Remove */}
-              {changes.modulesToRemove.length > 0 && (
+              {changes.modulesToDelete && changes.modulesToDelete.length > 0 && (
                 <div>
                   <div className="flex items-center gap-3 mb-6">
                     <Trash2 className="w-6 h-6 text-red-600" />
                     <h3 className="text-2xl font-bold text-gray-900">Modules to Remove</h3>
                     <span className="ml-auto bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">
-                      {changes.modulesToRemove.length}
+                      {changes.modulesToDelete.length}
                     </span>
                   </div>
 
                   <div className="space-y-3">
-                    {changes.modulesToRemove.map((module, index) => (
+                    {changes.modulesToDelete.map((module, index) => (
                       <div
                         key={index}
                         onClick={() => setExpandedChanges(prev => ({ ...prev, [`remove-${index}`]: !prev[`remove-${index}`] }))}
@@ -406,8 +292,8 @@ const Course = ({ onModuleClick }) => {
                           </div>
                           <div className="flex-1">
                             <h4 className="font-semibold text-gray-900">{module.title}</h4>
-                            <p className="text-sm text-red-600 mt-1">ID: {module.id}</p>
-                            <p className="text-sm text-gray-600 mt-2">{module.description}</p>
+                            {module.id && <p className="text-sm text-red-600 mt-1">ID: {module.id}</p>}
+                            {module.reason && <p className="text-sm text-gray-600 mt-2">{module.reason}</p>}
                             {expandedChanges[`remove-${index}`] && (
                               <div className="mt-3 p-3 bg-red-50 border border-red-100 rounded text-sm text-red-800">
                                 Less relevant based on job market demand. Consider archiving instead of deletion.
@@ -422,7 +308,7 @@ const Course = ({ onModuleClick }) => {
               )}
 
               {/* Modules to Add */}
-              {changes.modulesToAdd.length > 0 && (
+              {changes.modulesToAdd && changes.modulesToAdd.length > 0 && (
                 <div>
                   <div className="flex items-center gap-3 mb-6">
                     <Plus className="w-6 h-6 text-green-600" />
@@ -445,10 +331,16 @@ const Course = ({ onModuleClick }) => {
                           </div>
                           <div className="flex-1">
                             <h4 className="font-semibold text-gray-900">{module.title}</h4>
-                            <p className="text-sm text-gray-600 mt-2">{module.description}</p>
+                            {module.skills && (
+                              <p className="text-sm text-green-600 mt-1">
+                                Skills: {module.skills.join(', ')}
+                              </p>
+                            )}
+                            {module.reason && <p className="text-sm text-gray-600 mt-2">{module.reason}</p>}
+                            {module.description && !module.reason && <p className="text-sm text-gray-600 mt-2">{module.description}</p>}
                             {expandedChanges[`add-${index}`] && (
                               <div className="mt-3 p-3 bg-green-50 border border-green-100 rounded text-sm text-green-800">
-                                In high demand ({Math.floor(Math.random() * 40 + 60)}% of job listings). Critical for keeping curriculum relevant.
+                                In high demand based on job market analysis. Critical for keeping curriculum relevant.
                               </div>
                             )}
                           </div>
@@ -471,105 +363,10 @@ const Course = ({ onModuleClick }) => {
             </div>
           </div>
         )}
-
-        {/* Curriculum Updates Section */}
-        {(changes.modulesToRemove.length > 0 || changes.modulesToAdd.length > 0) && (
-          <div className="mt-16">
-            <div className="mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">Recommended Curriculum Updates</h2>
-              <p className="text-gray-600">
-                Based on current job market analysis, here are recommended changes for this course
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Modules to Remove */}
-              {changes.modulesToRemove.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <Trash2 className="w-6 h-6 text-red-600" />
-                    <h3 className="text-2xl font-bold text-gray-900">Modules to Remove</h3>
-                    <span className="ml-auto bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm font-semibold">
-                      {changes.modulesToRemove.length}
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    {changes.modulesToRemove.map((module, index) => (
-                      <div
-                        key={index}
-                        onClick={() => setExpandedChanges(prev => ({ ...prev, [`remove-${index}`]: !prev[`remove-${index}`] }))}
-                        className="bg-white border-2 border-red-200 rounded-lg p-5 cursor-pointer hover:shadow-lg hover:border-red-400 transition-all"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mt-0.5">
-                            <Trash2 className="w-4 h-4 text-red-600" />
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-gray-900">{module.title}</h4>
-                            <p className="text-sm text-red-600 mt-1">ID: {module.id}</p>
-                            <p className="text-sm text-gray-600 mt-2">{module.description}</p>
-                            {expandedChanges[`remove-${index}`] && (
-                              <div className="mt-3 p-3 bg-red-50 border border-red-100 rounded text-sm text-red-800">
-                                Less relevant based on job market demand. Consider archiving instead of deletion.
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* Modules to Add */}
-              {changes.modulesToAdd.length > 0 && (
-                <div>
-                  <div className="flex items-center gap-3 mb-6">
-                    <Plus className="w-6 h-6 text-green-600" />
-                    <h3 className="text-2xl font-bold text-gray-900">Modules to Add</h3>
-                    <span className="ml-auto bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold">
-                      {changes.modulesToAdd.length}
-                    </span>
-                  </div>
-
-                  <div className="space-y-3">
-                    {changes.modulesToAdd.map((module, index) => (
-                      <div
-                        key={index}
-                        onClick={() => setExpandedChanges(prev => ({ ...prev, [`add-${index}`]: !prev[`add-${index}`] }))}
-                        className="bg-white border-2 border-green-200 rounded-lg p-5 cursor-pointer hover:shadow-lg hover:border-green-400 transition-all"
-                      >
-                        <div className="flex items-start gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-green-100 flex items-center justify-center mt-0.5">
-                            <Plus className="w-4 h-4 text-green-600" />
-                          </div>
-                          <div className="flex-1">
-                            <h4 className="font-semibold text-gray-900">{module.title}</h4>
-                            <p className="text-sm text-gray-600 mt-2">{module.description}</p>
-                            {expandedChanges[`add-${index}`] && (
-                              <div className="mt-3 p-3 bg-green-50 border border-green-100 rounded text-sm text-green-800">
-                                In high demand ({Math.floor(Math.random() * 40 + 60)}% of job listings). Critical for keeping curriculum relevant.
-                              </div>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="mt-8 flex gap-4 flex-wrap">
-              <button className="px-6 py-2 bg-green-600 text-white rounded-lg font-medium hover:bg-green-700 transition-colors duration-200">
-                Approve Changes
-              </button>
-              <button className="px-6 py-2 bg-gray-200 text-gray-800 rounded-lg font-medium hover:bg-gray-300 transition-colors duration-200">
-                Review Later
-              </button>
-            </div>
+        
+        {loading && (
+          <div className="mt-16 text-center py-8">
+            <p className="text-gray-500">Loading curriculum recommendations...</p>
           </div>
         )}
       </div>
