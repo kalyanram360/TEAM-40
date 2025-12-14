@@ -91,11 +91,17 @@ print("="*60)
 
 print(json.dumps(gap_analysis_result, indent=2))
 
-# Also save to file
+# Save to RAG_System directory (for watch script to copy)
+rag_output_file = Path(__file__).parent / f"gap_analysis_{SELECTED_COURSE_ID}.json"
+with open(rag_output_file, "w") as f:
+    json.dump(gap_analysis_result, f, indent=2)
+
+# Also save to Frontend/public directory
 output_dir = Path(__file__).parent.parent / "Frontend" / "public"
 output_dir.mkdir(parents=True, exist_ok=True)  # Create directory if it doesn't exist
 output_file = output_dir / f"gap_analysis_{SELECTED_COURSE_ID}.json"
 with open(output_file, "w") as f:
     json.dump(gap_analysis_result, f, indent=2)
-print(f"\n✓ Results saved to: {output_file}")
+print(f"\n✓ Results saved to: {rag_output_file}")
+print(f"✓ Results saved to: {output_file}")
 

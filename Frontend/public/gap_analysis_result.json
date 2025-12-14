@@ -1,51 +1,46 @@
 {
-  "modulesToDelete": [],
+  "modulesToDelete": [
+    1,
+    3,
+    4
+  ],
   "modulesToAdd": [
     {
-      "title": "Python for Data Science & ML Foundations",
+      "title": "Python for Data Science",
       "skills": [
         "python",
         "numpy",
-        "pandas",
-        "data preprocessing",
-        "feature engineering"
+        "pandas"
       ],
-      "reason": "Establishes core programming and data manipulation skills essential for all AI/ML roles."
+      "reason": "Establishes foundational programming skills in Python and essential libraries for data manipulation and analysis, crucial for any machine learning workflow."
     },
     {
-      "title": "Core Machine Learning Concepts & Algorithms",
+      "title": "Fundamentals of Machine Learning",
       "skills": [
         "machine learning",
-        "scikit-learn",
-        "unsupervised learning"
+        "data preprocessing",
+        "feature engineering",
+        "python"
       ],
-      "reason": "Covers fundamental machine learning theory and practical application using industry-standard libraries."
+      "reason": "Introduces core machine learning concepts, algorithms, and essential steps like data preprocessing and feature engineering, which are central to the job market skills."
     },
     {
-      "title": "Deep Learning Architectures & Frameworks",
+      "title": "Introduction to Deep Learning",
       "skills": [
         "deep learning",
-        "pytorch",
-        "tensorflow"
+        "python"
       ],
-      "reason": "Addresses the high demand for deep learning expertise and proficiency in leading frameworks."
+      "reason": "Covers the principles of neural networks and deep learning architectures, a critical skill for advanced AI applications and explicitly listed in job market requirements."
     },
     {
-      "title": "Computer Vision Fundamentals",
-      "skills": [
-        "computer vision",
-        "opencv"
-      ],
-      "reason": "Covers a highly trending and specialized area within AI, requiring dedicated practical skills."
-    },
-    {
-      "title": "AI/ML Model Deployment & MLOps",
+      "title": "ML Model Deployment",
       "skills": [
         "model deployment",
         "docker",
-        "fastapi"
+        "fastapi",
+        "python"
       ],
-      "reason": "Crucial for bringing AI/ML models to production, a key skill for AI Engineers in real-world applications."
+      "reason": "Teaches practical skills for deploying machine learning models into production using Docker for containerization and FastAPI for creating robust APIs, directly addressing key deployment skills."
     }
   ]
 }

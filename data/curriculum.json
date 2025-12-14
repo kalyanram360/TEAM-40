@@ -19,11 +19,11 @@
         },
         {
           "id": 2,
-          "title": "Large Language Models",
-          "shortDescription": "LLM architecture.",
+          "title": "Web Development",
+          "shortDescription": "backend and frontend development.",
           "duration": "2 hours",
           "lessons": 9,
-          "fullDescription": "Transformers and pretraining."
+          "fullDescription": "MERN Stack"
         },
         {
           "id": 3,

@@ -1,56 +1,46 @@
 {
-  "modulesToDelete": [],
+  "modulesToDelete": [
+    1,
+    3,
+    4
+  ],
   "modulesToAdd": [
     {
-      "title": "Machine Learning Fundamentals & Data Engineering",
+      "title": "Python for Data Science",
+      "skills": [
+        "python",
+        "numpy",
+        "pandas"
+      ],
+      "reason": "Establishes foundational programming skills in Python and essential libraries for data manipulation and analysis, crucial for any machine learning workflow."
+    },
+    {
+      "title": "Fundamentals of Machine Learning",
       "skills": [
         "machine learning",
         "data preprocessing",
         "feature engineering",
-        "data cleaning",
-        "numpy",
-        "pandas",
-        "scikit-learn",
-        "unsupervised learning"
+        "python"
       ],
-      "reason": "Establishes a strong foundation in traditional machine learning concepts, essential data preparation techniques, and core Python libraries for data science, which are universally required."
+      "reason": "Introduces core machine learning concepts, algorithms, and essential steps like data preprocessing and feature engineering, which are central to the job market skills."
     },
     {
-      "title": "Deep Learning with PyTorch & TensorFlow",
+      "title": "Introduction to Deep Learning",
       "skills": [
         "deep learning",
-        "pytorch",
-        "tensorflow",
-        "embeddings"
+        "python"
       ],
-      "reason": "Covers the critical deep learning paradigms and the two most prominent frameworks (PyTorch and TensorFlow) consistently demanded in AI Engineer roles, including advanced concepts like embeddings."
+      "reason": "Covers the principles of neural networks and deep learning architectures, a critical skill for advanced AI applications and explicitly listed in job market requirements."
     },
     {
-      "title": "AI Model Deployment & MLOps",
+      "title": "ML Model Deployment",
       "skills": [
         "model deployment",
         "docker",
-        "fastapi"
+        "fastapi",
+        "python"
       ],
-      "reason": "Addresses the crucial gap in deploying AI models from development to production, incorporating modern tools like Docker for containerization and FastAPI for API development, which are vital for real-world applications."
-    },
-    {
-      "title": "Natural Language Processing (NLP) & LLM Applications",
-      "skills": [
-        "nlp",
-        "hugging face",
-        "langchain",
-        "embeddings"
-      ],
-      "reason": "Focuses on the highly trending and in-demand field of Natural Language Processing, including practical application with modern frameworks like Hugging Face and LangChain for Large Language Models."
-    },
-    {
-      "title": "Computer Vision with OpenCV",
-      "skills": [
-        "computer vision",
-        "opencv"
-      ],
-      "reason": "Provides specialized knowledge and practical skills in computer vision, a significant and growing area of AI, utilizing the widely adopted OpenCV library."
+      "reason": "Teaches practical skills for deploying machine learning models into production using Docker for containerization and FastAPI for creating robust APIs, directly addressing key deployment skills."
     }
   ]
 }

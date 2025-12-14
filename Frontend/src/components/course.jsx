@@ -19,8 +19,8 @@ const Course = ({ onModuleClick }) => {
         for (const course of curriculum.courses) {
           // Try multiple possible paths for the gap analysis files
           const paths = [
-            `/gap_analysis_${course.id}.json`, // Frontend public folder (preferred)
-            `../../RAG_System/gap_analysis_${course.id}.json`, // Relative to Frontend folder
+            `/gap_analysis_result.json`, // Frontend public folder (preferred)
+            `../../RAG_System/gap_analysis_result.json`, // Relative to Frontend folder
           ];
           
           let loaded = false;
