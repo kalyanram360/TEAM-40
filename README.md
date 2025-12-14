@@ -24,17 +24,13 @@ Rather than treating curriculum design and instructor hiring as separate workflo
 
 Modern job roles evolve rapidly, but curriculum updates and instructor hiring processes lag behind. Institutions face two connected challenges:
 
-### 1️⃣ Curriculum Drift
+###  Curriculum Drift
 
 * Curricula are updated infrequently and manually
 * Updates rely on intuition rather than job-market evidence
 * Graduates are often underprepared for current roles
 
-### 2️⃣ Instructor Supply Gap
 
-* New skills require new teaching capability
-* Instructor hiring is reactive and disconnected from curriculum changes
-* No system links **job demand → curriculum change → instructor readiness**
 
 ### Impact
 
@@ -80,23 +76,7 @@ All outputs are generated **only from retrieved evidence** — never from LLM me
 * Maps:
 
   * Required skills → curriculum modules
-  * Required skills → instructor capability
-* Detects **teaching capacity risk** when curriculum updates exceed instructor readiness
 
----
-
-### 3️⃣ Instructor Hiring Intelligence (RAG-Driven)
-
-When a skill gap and instructor shortage are detected:
-
-* Retrieves external public talent signals
-* Generates:
-
-  * Hiring role definition
-  * Urgency assessment
-  * Safe, legal sourcing strategies (queries, not personal data)
-
-All hiring recommendations are **advisory and human-in-the-loop**.
 
 ---
 
