@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, BookOpen, Clock, Award, PlayCircle, ChevronLeft, ChevronRight, Trash2, Plus } from 'lucide-react';
+import { ChevronDown, BookOpen, Clock, Award, PlayCircle, ChevronLeft, ChevronRight, Trash2, Plus, Star, Mail, Linkedin, Github, Twitter } from 'lucide-react';
 import curriculum from '../../../data/curriculum.json';
+import instructors from '../../../data/instructors.json';
 
 const Course = ({ onModuleClick }) => {
   const [expandedModule, setExpandedModule] = useState(null);
@@ -63,10 +64,16 @@ const Course = ({ onModuleClick }) => {
     loadGapAnalysis();
   }, []);
   
+  
   const courses = curriculum.courses;
   const course = courses[currentCourseIndex];
   const { id, courseName, description, instructor, duration, level, enrolled, modules } = course;
   const changes = gapAnalysisResults[id] || { modulesToDelete: [], modulesToAdd: [] };
+
+  // Find instructor information from instructors.json
+  const instructorData = instructors.instructors.find(
+    (inst) => inst.name.toLowerCase() === instructor.toLowerCase()
+  );
 
   const toggleModule = (moduleId) => {
     setExpandedModule(expandedModule === moduleId ? null : moduleId);
@@ -159,6 +166,119 @@ const Course = ({ onModuleClick }) => {
           </div>
         </div>
       </div>
+
+      {/* Instructor Profile Section */}
+      {instructorData && (
+        <div className="bg-white border-b border-gray-200">
+          <div className="max-w-6xl mx-auto px-6 py-12">
+            <h2 className="text-3xl font-bold text-gray-900 mb-8">Your Instructor</h2>
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-8 items-start">
+              {/* Instructor Image & Basic Info */}
+              <div className="lg:col-span-1 flex flex-col items-center text-center">
+                <div className="mb-6 relative">
+                  <img 
+                    src={instructorData.image} 
+                    alt={instructorData.name}
+                    className="w-40 h-40 rounded-full shadow-lg border-4 border-blue-100"
+                  />
+                  <div className="absolute bottom-0 right-0 bg-yellow-400 text-white px-3 py-1 rounded-full flex items-center gap-1 shadow-lg">
+                    <Star className="w-4 h-4 fill-current" />
+                    <span className="font-bold">{instructorData.rating}</span>
+                  </div>
+                </div>
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">{instructorData.name}</h3>
+                <p className="text-blue-600 font-medium mb-4">{instructorData.title}</p>
+                
+                {/* Social Links */}
+                <div className="flex justify-center gap-3 mb-6">
+                  {instructorData.social?.linkedin && (
+                    <a 
+                      href={instructorData.social.linkedin} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-gray-100 hover:bg-blue-600 hover:text-white rounded-full transition-colors duration-200"
+                      aria-label="LinkedIn"
+                    >
+                      <Linkedin className="w-5 h-5" />
+                    </a>
+                  )}
+                  {instructorData.social?.github && (
+                    <a 
+                      href={instructorData.social.github} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-gray-100 hover:bg-gray-800 hover:text-white rounded-full transition-colors duration-200"
+                      aria-label="GitHub"
+                    >
+                      <Github className="w-5 h-5" />
+                    </a>
+                  )}
+                  {instructorData.social?.twitter && (
+                    <a 
+                      href={instructorData.social.twitter} 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      className="p-3 bg-gray-100 hover:bg-blue-400 hover:text-white rounded-full transition-colors duration-200"
+                      aria-label="Twitter"
+                    >
+                      <Twitter className="w-5 h-5" />
+                    </a>
+                  )}
+                </div>
+
+                {/* Contact Button */}
+                <button className="w-full px-4 py-2 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-700 transition-colors duration-200 flex items-center justify-center gap-2">
+                  <Mail className="w-4 h-4" />
+                  Contact
+                </button>
+              </div>
+
+              {/* Instructor Details */}
+              <div className="lg:col-span-3">
+                {/* Biography */}
+                <div className="mb-8">
+                  <h4 className="text-xl font-bold text-gray-900 mb-3">About the Instructor</h4>
+                  <p className="text-gray-700 leading-relaxed text-lg">{instructorData.bio}</p>
+                </div>
+
+                {/* Stats Grid */}
+                <div className="grid grid-cols-3 gap-4 mb-8 p-6 bg-gradient-to-r from-blue-50 to-purple-50 rounded-xl border border-blue-100">
+                  <div className="text-center">
+                    <div className="text-3xl font-bold text-blue-600 mb-2">{instructorData.students}</div>
+                    <p className="text-sm text-gray-600">Students Taught</p>
+                  </div>
+                  <div className="text-center border-l border-r border-gray-300">
+                    <div className="text-3xl font-bold text-green-600 mb-2">{instructorData.reviews.toLocaleString()}</div>
+                    <p className="text-sm text-gray-600">Reviews</p>
+                  </div>
+                  <div className="text-center">
+                    <div className="flex items-center justify-center gap-1 mb-2">
+                      <Star className="w-5 h-5 fill-yellow-400 text-yellow-400" />
+                      <span className="text-3xl font-bold text-yellow-500">{instructorData.rating}</span>
+                    </div>
+                    <p className="text-sm text-gray-600">Rating</p>
+                  </div>
+                </div>
+
+                {/* Expertise Tags */}
+                <div>
+                  <h4 className="text-lg font-bold text-gray-900 mb-4">Expertise & Specializations</h4>
+                  <div className="flex flex-wrap gap-3">
+                    {instructorData.expertise?.map((skill, index) => (
+                      <span
+                        key={index}
+                        className="px-4 py-2 bg-blue-100 text-blue-700 rounded-full font-medium text-sm hover:bg-blue-200 transition-colors duration-200"
+                      >
+                        {skill}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Content */}
       <div className="max-w-6xl mx-auto px-6 py-12">
